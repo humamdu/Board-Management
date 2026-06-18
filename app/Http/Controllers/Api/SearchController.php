@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Controller; use App\Models\Card; use Illuminate\Http\Request;
+class SearchController extends Controller { public function __invoke(Request $r){$q=Card::with('tags','priority','assignee')->whereHas('board.members',fn($m)=>$m->where('users.id',$r->user()->id)); foreach(['board_id','kanban_list_id','status','priority_id','assignee_id','type'] as $f) if($r->filled($f)) $q->where($f,$r->$f); if($r->filled('from'))$q->whereDate('due_date','>=',$r->from); if($r->filled('to'))$q->whereDate('due_date','<=',$r->to); if($r->filled('tag'))$q->whereHas('tags',fn($t)=>$t->where('name',$r->tag)); if($r->filled('q'))$q->where(fn($s)=>$s->whereFullText(['title','description'],$r->q)->orWhereHas('comments',fn($c)=>$c->whereFullText('comment',$r->q))->orWhereHas('tags',fn($t)=>$t->where('name','like','%'.$r->q.'%'))); return $q->latest()->paginate(50);} }

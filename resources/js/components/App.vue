@@ -1,0 +1,1 @@
+<template><div><header class="bg-white border-b px-6 py-4 flex justify-between"><h1 class="font-bold text-xl">Task & Notes Management</h1><nav class="text-sm text-slate-600">Boards · Search · Dashboard</nav></header><main class="p-4"><RouterView /></main></div></template>

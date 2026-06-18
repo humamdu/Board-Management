@@ -1,0 +1,2 @@
+import {defineStore} from 'pinia';import axios from 'axios';
+export const useBoards=defineStore('boards',{state:()=>({boards:[] as any[],active:null as any}),actions:{async load(){this.boards=(await axios.get('/api/boards')).data.data},async open(id:string){this.active=(await axios.get(`/api/boards/${id}`)).data},async move(card:any,listId:number,position:number){await axios.patch(`/api/cards/${card.id}/move`,{kanban_list_id:listId,position});card.kanban_list_id=listId;card.position=position}}});
