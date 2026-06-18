@@ -1,0 +1,4 @@
+services:
+  app: { build: ., volumes: ['.:/var/www/html'], depends_on: [mysql], environment: { APP_ENV: local } }
+  mysql: { image: mysql:8.4, environment: { MYSQL_DATABASE: board_management, MYSQL_USER: board, MYSQL_PASSWORD: secret, MYSQL_ROOT_PASSWORD: root }, ports: ['3306:3306'] }
+  reverb: { build: ., command: php artisan reverb:start --host=0.0.0.0, ports: ['8080:8080'], depends_on: [app] }
